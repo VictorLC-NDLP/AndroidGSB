@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AndroidGSB.Views.MajEchantillonPage"
+             Title="MAJ d'un échantillon"
+             BackgroundColor="#1a472a">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,20"
+            Spacing="15">
+
+            <Label
+                Text="📊 MAJ d'un échantillon :"
+                FontSize="16"
+                FontAttributes="Bold"
+                TextColor="#f1f3f1"
+                FontFamily="OpenSansRegular"/>
+
+            <Entry
+                Placeholder="Saisir ici un code"
+                PlaceholderColor="#d4d8d4"
+                Text="{Binding CodeProduit}"
+                TextColor="#f1f3f1"
+                BackgroundColor="#2d6a4f"
+                FontFamily="OpenSansRegular"/>
+
+            <Entry
+                Placeholder="Saisir ici une quantité"
+                PlaceholderColor="#d4d8d4"
+                Text="{Binding QuantiteSaisie}"
+                Keyboard="Numeric"
+                TextColor="#f1f3f1"
+                BackgroundColor="#2d6a4f"
+                FontFamily="OpenSansRegular"/>
+
+            <Grid
+                ColumnDefinitions="*,*"
+                ColumnSpacing="10"
+                Margin="0,10,0,0">
+
+                <Button
+                    Grid.Column="0"
+                    Text="➖ Supprimer"
+                    Command="{Binding SupprimerStockCommand}"
+                    BackgroundColor="#d62828"
+                    TextColor="#f1f3f1"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    Padding="10"
+                    FontFamily="OpenSansRegular"/>
+
+                <Button
+                    Grid.Column="1"
+                    Text="➕ Ajouter"
+                    Command="{Binding AjouterStockCommand}"
+                    BackgroundColor="#40916c"
+                    TextColor="#f1f3f1"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    Padding="10"
+                    FontFamily="OpenSansRegular"/>
+
+            </Grid>
+
+            <Button
+                Text="🚪 Quitter"
+                Command="{Binding QuitterCommand}"
+                BackgroundColor="#0f2818"
+                TextColor="#d4d8d4"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                Padding="15,10"
+                HorizontalOptions="Fill"
+                Margin="0,20,0,0"
+                FontFamily="OpenSansRegular"/>
+
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                Color="#52b788"
+                Margin="0,10"/>
+
+            <Label
+                Text="{Binding MessageResultat}"
+                TextColor="#d4d8d4"
+                FontSize="12"
+                Margin="0,20,0,0"
+                LineBreakMode="WordWrap"
+                FontFamily="OpenSansRegular"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
+

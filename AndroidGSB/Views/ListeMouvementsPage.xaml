@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AndroidGSB.Views.ListeMouvementsPage"
+             Title="Mouvements de stock"
+             BackgroundColor="#1a472a">
+
+    <VerticalStackLayout
+        Padding="10"
+        Spacing="10">
+
+        <Grid
+            ColumnDefinitions="*,*,*"
+            ColumnSpacing="5"
+            Padding="5">
+
+            <Button
+                Grid.Column="0"
+                Text="Tous"
+                Command="{Binding AfficherTousCommand}"
+                BackgroundColor="#40916c"
+                TextColor="#f1f3f1"
+                FontSize="12"
+                CornerRadius="8"
+                Padding="5"
+                FontFamily="OpenSansRegular"/>
+
+            <Button
+                Grid.Column="1"
+                Text="Ajouts"
+                Command="{Binding FiltrerAjoutsCommand}"
+                BackgroundColor="#52b788"
+                TextColor="#1a472a"
+                FontSize="12"
+                CornerRadius="8"
+                Padding="5"
+                FontFamily="OpenSansRegular"/>
+
+            <Button
+                Grid.Column="2"
+                Text="Suppressions"
+                Command="{Binding FiltrerSuppressionsCommand}"
+                BackgroundColor="#d62828"
+                TextColor="#f1f3f1"
+                FontSize="12"
+                CornerRadius="8"
+                Padding="5"
+                FontFamily="OpenSansRegular"/>
+
+        </Grid>
+
+        <Label
+            Text="{Binding FiltreActif, StringFormat='Filtre actif: {0}'}"
+            TextColor="#d4d8d4"
+            FontSize="12"
+            Padding="10,0"
+            FontFamily="OpenSansRegular"/>
+
+        <ActivityIndicator
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            Color="#52b788"/>
+
+        <CollectionView
+            ItemsSource="{Binding Mouvements}"
+            SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame
+                        Padding="10"
+                        Margin="5,5"
+                        CornerRadius="12"
+                        BackgroundColor="#2d6a4f"
+                        BorderColor="#40916c"
+                        HasShadow="True">
+                        <Grid
+                            RowDefinitions="Auto,Auto,Auto,Auto"
+                            ColumnDefinitions="*,Auto">
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Text="{Binding CodeProduit, StringFormat='Code: {0}'}"
+                                FontAttributes="Bold"
+                                TextColor="#52b788"
+                                FontSize="14"
+                                FontFamily="OpenSansRegular"/>
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="{Binding Mouvement, StringFormat='{0}'}"
+                                FontAttributes="Bold"
+                                TextColor="#a8b2d8"
+                                FontSize="12"/>
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Quantite, StringFormat='Quantité: {0}'}"
+                                TextColor="#d4d8d4"
+                                FontSize="12"
+                                FontFamily="OpenSansRegular"
+                                Margin="0,3,0,0"/>
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Date, StringFormat='Date: {0:dd/MM/yyyy HH:mm:ss}'}"
+                                TextColor="#d4d8d4"
+                                FontSize="11"
+                                FontFamily="OpenSansRegular"
+                                Margin="0,3,0,0"/>
+
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button
+            Text="🚪 Quitter"
+            Command="{Binding QuitterCommand}"
+            BackgroundColor="#d62828"
+            TextColor="#f1f3f1"
+            FontAttributes="Bold"
+            CornerRadius="10"
+            Padding="15,10"
+            HorizontalOptions="Fill"
+            FontFamily="OpenSansRegular"/>
+
+    </VerticalStackLayout>
+
+</ContentPage>
+

@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AndroidGSB.MainPage"
+             Title="Gestion des échantillons GSB"
+             BackgroundColor="#1a472a">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,20"
+            Spacing="20">
+            
+            <Label
+                Text="Application de gestion des échantillons de compléments alimentaires"
+                FontSize="18"
+                FontAttributes="Bold"
+                TextColor="#f1f3f1"
+                HorizontalOptions="Center"
+                Margin="0,10"
+                FontFamily="OpenSansRegular"/>
+
+            <Button
+                Text="🌿 Ajouter un nouvel échantillon"
+                Command="{Binding NavigateToAjouterCommand}"
+                Padding="15,10"
+                CornerRadius="12"
+                BackgroundColor="#40916c"
+                TextColor="#f1f3f1"
+                FontAttributes="Bold"
+                FontSize="14"
+                FontFamily="OpenSansRegular"/>
+
+            <Button
+                Text="📋 Liste des échantillons"
+                Command="{Binding NavigateToListeCommand}"
+                Padding="15,10"
+                CornerRadius="12"
+                BackgroundColor="#2d6a4f"
+                TextColor="#f1f3f1"
+                FontAttributes="Bold"
+                FontSize="14"
+                FontFamily="OpenSansRegular"/>
+
+            <Button
+                Text="📊 Maj d'un échantillon"
+                Command="{Binding NavigateToMajCommand}"
+                Padding="15,10"
+                CornerRadius="12"
+                BackgroundColor="#40916c"
+                TextColor="#f1f3f1"
+                FontAttributes="Bold"
+                FontSize="14"
+                FontFamily="OpenSansRegular"/>
+
+            <Button
+                Text="➕ Liste des ajouts"
+                Command="{Binding NavigateToMouvementsCommand}"
+                Padding="15,10"
+                CornerRadius="12"
+                BackgroundColor="#52b788"
+                TextColor="#1a472a"
+                FontAttributes="Bold"
+                FontSize="14"
+                FontFamily="OpenSansRegular"/>
+
+            <Button
+                Text="➖ Liste des suppressions"
+                Command="{Binding NavigateToMouvementsCommand}"
+                Padding="15,10"
+                CornerRadius="12"
+                BackgroundColor="#d62828"
+                TextColor="#f1f3f1"
+                FontAttributes="Bold"
+                FontSize="14"
+                FontFamily="OpenSansRegular"/>
+
+            <Button
+                Text="🚪 Quitter"
+                Command="{Binding QuitterCommand}"
+                Padding="15,10"
+                CornerRadius="12"
+                BackgroundColor="#0f2818"
+                TextColor="#d4d8d4"
+                FontAttributes="Bold"
+                FontSize="14"
+                FontFamily="OpenSansRegular"
+                Margin="0,20,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
