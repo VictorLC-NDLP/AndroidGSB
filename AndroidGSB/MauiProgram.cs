@@ -1,10 +1,15 @@
-﻿﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using AndroidGSB.Data;
 using AndroidGSB.Views;
 using AndroidGSB.ViewModels;
 
 namespace AndroidGSB;
 
+/// <summary>
+/// Point d'entree de la configuration MAUI.
+/// Enregistre les services (injection de dependances), les polices,
+/// et initialise le ServiceProvider pour l'acces global aux services.
+/// </summary>
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -18,23 +23,22 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Enregistrer le DatabaseService comme singleton
+        // Service de base de donnees enregistre en singleton : une seule instance partagee
         builder.Services.AddSingleton<DatabaseService>();
 
-        // Enregistrer les Pages
+        // Pages enregistrees en transient : nouvelle instance a chaque navigation
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<AjoutEchantillonPage>();
         builder.Services.AddTransient<ListeEchantillonsPage>();
         builder.Services.AddTransient<MajEchantillonPage>();
         builder.Services.AddTransient<ListeMouvementsPage>();
 
-        // Enregistrer les ViewModels
+        // ViewModels enregistres en transient
         builder.Services.AddTransient<MainViewModel>();
         builder.Services.AddTransient<AjoutEchantillonViewModel>();
         builder.Services.AddTransient<ListeEchantillonsViewModel>();
         builder.Services.AddTransient<MajEchantillonViewModel>();
         builder.Services.AddTransient<ListeMouvementsViewModel>();
-
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -42,7 +46,7 @@ public static class MauiProgram
 
         var app = builder.Build();
 
-        // Stocker le service provider pour ServiceHelper
+        // Rend le conteneur DI accessible globalement via ServiceHelper
         ServiceHelper.Services = app.Services;
 
         return app;

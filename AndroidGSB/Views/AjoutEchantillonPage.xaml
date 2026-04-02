@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- Formulaire de saisie d'un nouvel echantillon -->
+<!-- Chaque Entry est lie a une propriete du AjoutEchantillonViewModel via data binding -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AndroidGSB.Views.AjoutEchantillonPage"
@@ -17,6 +19,7 @@
                 TextColor="#f1f3f1"
                 FontFamily="OpenSansRegular"/>
 
+            <!-- Champ code produit -->
             <Entry
                 Placeholder="Saisir ici un code"
                 PlaceholderColor="#d4d8d4"
@@ -25,6 +28,7 @@
                 BackgroundColor="#2d6a4f"
                 FontFamily="OpenSansRegular"/>
 
+            <!-- Champ libelle produit -->
             <Entry
                 Placeholder="Saisir ici un libellé"
                 PlaceholderColor="#d4d8d4"
@@ -33,6 +37,7 @@
                 BackgroundColor="#2d6a4f"
                 FontFamily="OpenSansRegular"/>
 
+            <!-- Champ stock initial (numerique) -->
             <Entry
                 Placeholder="Saisir ici un stock"
                 PlaceholderColor="#d4d8d4"
@@ -42,6 +47,7 @@
                 BackgroundColor="#2d6a4f"
                 FontFamily="OpenSansRegular"/>
 
+            <!-- Boutons d'action : ajouter ou quitter -->
             <Grid
                 ColumnDefinitions="*,*"
                 ColumnSpacing="10"
@@ -71,12 +77,14 @@
 
             </Grid>
 
+            <!-- Indicateur de chargement pendant l'ecriture en base -->
             <ActivityIndicator
                 IsRunning="{Binding IsBusy}"
                 IsVisible="{Binding IsBusy}"
                 Color="#52b788"
                 Margin="0,10"/>
 
+            <!-- Message de retour : succes ou erreur -->
             <Label
                 Text="{Binding MessageResultat}"
                 TextColor="#d4d8d4"

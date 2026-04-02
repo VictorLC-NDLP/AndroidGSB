@@ -5,16 +5,24 @@ using System.Diagnostics;
 
 namespace AndroidGSB.ViewModels;
 
+/// <summary>
+/// ViewModel de la page de mise a jour du stock.
+/// Permet d'ajouter ou de retirer une quantite au stock d'un echantillon existant.
+/// Chaque operation est tracee dans la table MajStock.
+/// </summary>
 public partial class MajEchantillonViewModel : BaseViewModel
 {
     private readonly DatabaseService _databaseService;
 
+    // Code du produit a modifier, saisi par l'utilisateur
     [ObservableProperty]
     private string codeProduit = string.Empty;
 
+    // Quantite a ajouter ou retirer, saisie par l'utilisateur
     [ObservableProperty]
     private string quantiteSaisie = string.Empty;
 
+    // Message de retour affiche apres l'operation
     [ObservableProperty]
     private string messageResultat = string.Empty;
 
@@ -24,6 +32,10 @@ public partial class MajEchantillonViewModel : BaseViewModel
         Title = "MAJ d'un échantillon";
     }
 
+    /// <summary>
+    /// Ajoute la quantite saisie au stock du produit.
+    /// Controles : code non vide, quantite positive, produit existant en base.
+    /// </summary>
     [RelayCommand]
     public async Task AjouterStock()
     {
@@ -31,7 +43,6 @@ public partial class MajEchantillonViewModel : BaseViewModel
         {
             IsBusy = true;
 
-            // Validation
             if (string.IsNullOrWhiteSpace(CodeProduit))
             {
                 MessageResultat = "Erreur : Le code produit ne peut pas être vide";
@@ -44,7 +55,7 @@ public partial class MajEchantillonViewModel : BaseViewModel
                 return;
             }
 
-            // Vérifier que l'échantillon existe
+            // Verification que le produit existe en base
             var echantillon = await _databaseService.GetEchantillonByCodeAsync(CodeProduit);
             if (echantillon == null)
             {
@@ -52,11 +63,10 @@ public partial class MajEchantillonViewModel : BaseViewModel
                 return;
             }
 
-            // Ajouter le stock
             var success = await _databaseService.AjouterStockAsync(CodeProduit, quantite);
             if (success)
             {
-                MessageResultat = $"✓ Quantité ajoutée pour {CodeProduit} : +{quantite}";
+                MessageResultat = $"Quantite ajoutee pour {CodeProduit} : +{quantite}";
                 QuantiteSaisie = string.Empty;
             }
             else
@@ -75,6 +85,10 @@ public partial class MajEchantillonViewModel : BaseViewModel
         }
     }
 
+    /// <summary>
+    /// Retire la quantite saisie du stock du produit.
+    /// Controles supplementaires : le stock resultant ne doit pas etre negatif.
+    /// </summary>
     [RelayCommand]
     public async Task SupprimerStock()
     {
@@ -82,7 +96,6 @@ public partial class MajEchantillonViewModel : BaseViewModel
         {
             IsBusy = true;
 
-            // Validation
             if (string.IsNullOrWhiteSpace(CodeProduit))
             {
                 MessageResultat = "Erreur : Le code produit ne peut pas être vide";
@@ -95,7 +108,6 @@ public partial class MajEchantillonViewModel : BaseViewModel
                 return;
             }
 
-            // Vérifier que l'échantillon existe
             var echantillon = await _databaseService.GetEchantillonByCodeAsync(CodeProduit);
             if (echantillon == null)
             {
@@ -103,18 +115,17 @@ public partial class MajEchantillonViewModel : BaseViewModel
                 return;
             }
 
-            // Vérifier que le stock ne deviendra pas négatif
+            // Verification que le stock est suffisant pour la suppression
             if (echantillon.Stock < quantite)
             {
                 MessageResultat = $"Erreur : Stock insuffisant (actuellement {echantillon.Stock})";
                 return;
             }
 
-            // Supprimer le stock
             var success = await _databaseService.SupprimerStockAsync(CodeProduit, quantite);
             if (success)
             {
-                MessageResultat = $"✓ Quantité supprimée pour {CodeProduit} : -{quantite}";
+                MessageResultat = $"Quantite supprimee pour {CodeProduit} : -{quantite}";
                 QuantiteSaisie = string.Empty;
             }
             else
@@ -133,11 +144,10 @@ public partial class MajEchantillonViewModel : BaseViewModel
         }
     }
 
+    // Retour a la page precedente
     [RelayCommand]
     public async Task Quitter()
     {
         await Shell.Current.GoToAsync("..");
     }
 }
-
-

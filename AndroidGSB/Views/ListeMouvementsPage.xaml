@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- Historique des mouvements de stock (ajouts et suppressions) -->
+<!-- Trois boutons de filtre en haut permettent de filtrer par type -->
+<!-- La CollectionView affiche les mouvements avec code, quantite, type et date -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AndroidGSB.Views.ListeMouvementsPage"
@@ -9,6 +12,7 @@
         Padding="10"
         Spacing="10">
 
+        <!-- Barre de filtres : Tous, Ajouts, Suppressions -->
         <Grid
             ColumnDefinitions="*,*,*"
             ColumnSpacing="5"

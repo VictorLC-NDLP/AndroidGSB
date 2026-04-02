@@ -7,17 +7,26 @@ using System.Diagnostics;
 
 namespace AndroidGSB.ViewModels;
 
+/// <summary>
+/// ViewModel de la page d'historique des mouvements de stock.
+/// Permet d'afficher tous les mouvements ou de filtrer par type (ajouts/suppressions).
+/// Le filtre peut etre passe en parametre lors de la navigation via QueryProperty.
+/// </summary>
 [QueryProperty(nameof(Filtre), "filtre")]
 public partial class ListeMouvementsViewModel : BaseViewModel
 {
     private readonly DatabaseService _databaseService;
 
+    // Collection des mouvements affiches dans la CollectionView
     [ObservableProperty]
     private ObservableCollection<MajStock> mouvements = new();
 
+    // Libelle du filtre actif affiche dans l'interface
     [ObservableProperty]
     private string filtreActif = "Tous";
 
+    // Filtre recu en parametre de navigation (via l'URL "?filtre=ajouts")
+    // La modification de cette propriete declenche automatiquement le filtrage
     private string _filtre = "tous";
     public string Filtre
     {
@@ -35,6 +44,7 @@ public partial class ListeMouvementsViewModel : BaseViewModel
         Title = "Mouvements de stock";
     }
 
+    // Charge tous les mouvements sans filtre
     [RelayCommand]
     public async Task ChargerMouvements()
     {
@@ -55,6 +65,7 @@ public partial class ListeMouvementsViewModel : BaseViewModel
         }
     }
 
+    // Affiche uniquement les mouvements de type "ajout"
     [RelayCommand]
     public async Task FiltrerAjouts()
     {
@@ -75,6 +86,7 @@ public partial class ListeMouvementsViewModel : BaseViewModel
         }
     }
 
+    // Affiche uniquement les mouvements de type "suppression"
     [RelayCommand]
     public async Task FiltrerSuppressions()
     {
@@ -95,12 +107,14 @@ public partial class ListeMouvementsViewModel : BaseViewModel
         }
     }
 
+    // Raccourci pour recharger sans filtre
     [RelayCommand]
     public async Task AfficherTous()
     {
         await ChargerMouvementsCommand.ExecuteAsync(null);
     }
 
+    // Applique le filtre recu en parametre de navigation
     private async Task AppliquerFiltreAsync()
     {
         if (_filtre == "ajouts")
@@ -117,11 +131,10 @@ public partial class ListeMouvementsViewModel : BaseViewModel
         }
     }
 
+    // Retour a la page precedente
     [RelayCommand]
     public async Task Quitter()
     {
         await Shell.Current.GoToAsync("..");
     }
 }
-
-

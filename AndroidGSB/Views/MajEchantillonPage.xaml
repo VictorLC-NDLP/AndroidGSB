@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- Formulaire de mise a jour du stock d'un echantillon existant -->
+<!-- Deux actions possibles : ajouter ou retirer une quantite -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AndroidGSB.Views.MajEchantillonPage"
@@ -17,6 +19,7 @@
                 TextColor="#f1f3f1"
                 FontFamily="OpenSansRegular"/>
 
+            <!-- Champ code produit a modifier -->
             <Entry
                 Placeholder="Saisir ici un code"
                 PlaceholderColor="#d4d8d4"
@@ -25,6 +28,7 @@
                 BackgroundColor="#2d6a4f"
                 FontFamily="OpenSansRegular"/>
 
+            <!-- Champ quantite a ajouter ou retirer -->
             <Entry
                 Placeholder="Saisir ici une quantité"
                 PlaceholderColor="#d4d8d4"
@@ -34,6 +38,7 @@
                 BackgroundColor="#2d6a4f"
                 FontFamily="OpenSansRegular"/>
 
+            <!-- Boutons d'action : supprimer du stock ou en ajouter -->
             <Grid
                 ColumnDefinitions="*,*"
                 ColumnSpacing="10"

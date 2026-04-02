@@ -7,10 +7,15 @@ using System.Diagnostics;
 
 namespace AndroidGSB.ViewModels;
 
+/// <summary>
+/// ViewModel de la page liste des echantillons.
+/// Charge les echantillons depuis la base et les expose dans une collection observable.
+/// </summary>
 public partial class ListeEchantillonsViewModel : BaseViewModel
 {
     private readonly DatabaseService _databaseService;
 
+    // Collection liee a la CollectionView de l'interface
     [ObservableProperty]
     private ObservableCollection<Echantillon> echantillons = new();
 
@@ -20,6 +25,8 @@ public partial class ListeEchantillonsViewModel : BaseViewModel
         Title = "Liste des échantillons";
     }
 
+    // Charge tous les echantillons depuis la base SQLite
+    // Appelee dans OnAppearing de la page pour rafraichir les donnees a chaque affichage
     [RelayCommand]
     public async Task ChargerEchantillons()
     {
@@ -39,11 +46,10 @@ public partial class ListeEchantillonsViewModel : BaseViewModel
         }
     }
 
+    // Retour a la page precedente
     [RelayCommand]
     public async Task Quitter()
     {
         await Shell.Current.GoToAsync("..");
     }
 }
-
-

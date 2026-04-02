@@ -4,6 +4,11 @@ using System.Diagnostics;
 
 namespace AndroidGSB.Data;
 
+/// <summary>
+/// Service de persistance des donnees. Gere l'ensemble des operations
+/// sur la base SQLite locale : CRUD echantillons, gestion du stock
+/// et historique des mouvements. Enregistre comme singleton dans l'application.
+/// </summary>
 public class DatabaseService
 {
     private SQLiteAsyncConnection? _database;
@@ -13,6 +18,10 @@ public class DatabaseService
     {
     }
 
+    /// <summary>
+    /// Initialise la connexion et cree les tables si necessaire.
+    /// Utilise un flag pour ne s'executer qu'une seule fois (initialisation paresseuse).
+    /// </summary>
     private async Task EnsureInitAsync()
     {
         if (_initialized)
@@ -20,28 +29,35 @@ public class DatabaseService
 
         try
         {
+            // Ouverture de la connexion asynchrone vers le fichier SQLite
             _database = new SQLiteAsyncConnection(
                 DatabaseConstants.DatabasePath,
                 DatabaseConstants.Flags);
 
+            // Creation des tables si elles n'existent pas encore
             await _database.CreateTableAsync<Echantillon>();
             await _database.CreateTableAsync<MajStock>();
 
             _initialized = true;
+
+            // Insertion du jeu d'essai au premier lancement
             await InsererDonneesTestAsync();
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de l'initialisation de la base de données: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de l'initialisation de la base de donnees: {ex.Message}");
         }
     }
 
+    // Point d'entree public pour forcer l'initialisation si besoin
     public async Task InitAsync()
     {
         await EnsureInitAsync();
     }
 
-    // Méthodes CRUD pour Echantillon
+    // --- CRUD Echantillon ---
+
+    // Recupere la liste complete des echantillons
     public async Task<List<Echantillon>> GetEchantillonsAsync()
     {
         try
@@ -54,11 +70,12 @@ public class DatabaseService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de la récupération des échantillons: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de la recuperation des echantillons: {ex.Message}");
             return [];
         }
     }
 
+    // Recherche un echantillon par son code produit
     public async Task<Echantillon?> GetEchantillonByCodeAsync(string code)
     {
         try
@@ -72,11 +89,12 @@ public class DatabaseService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de la récupération de l'échantillon: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de la recuperation de l'echantillon: {ex.Message}");
             return null;
         }
     }
 
+    // Insere un nouvel echantillon en base. Retourne le nombre de lignes affectees.
     public async Task<int> InsererEchantillonAsync(Echantillon echantillon)
     {
         try
@@ -89,11 +107,12 @@ public class DatabaseService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de l'insertion de l'échantillon: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de l'insertion de l'echantillon: {ex.Message}");
             return -1;
         }
     }
 
+    // Met a jour un echantillon existant (identifie par son Id)
     public async Task<int> UpdateEchantillonAsync(Echantillon echantillon)
     {
         try
@@ -106,11 +125,12 @@ public class DatabaseService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de la mise à jour de l'échantillon: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de la mise a jour de l'echantillon: {ex.Message}");
             return -1;
         }
     }
 
+    // Supprime un echantillon a partir de son code produit
     public async Task<int> SupprimerEchantillonAsync(string code)
     {
         try
@@ -127,12 +147,17 @@ public class DatabaseService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de la suppression de l'échantillon: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de la suppression de l'echantillon: {ex.Message}");
             return -1;
         }
     }
 
-    // Gestion du stock
+    // --- Gestion du stock ---
+
+    /// <summary>
+    /// Ajoute une quantite au stock d'un echantillon.
+    /// Met a jour la table Echantillons et insere une ligne de tracabilite dans MajStock.
+    /// </summary>
     public async Task<bool> AjouterStockAsync(string code, float quantite)
     {
         try
@@ -145,9 +170,11 @@ public class DatabaseService
             if (echantillon == null)
                 return false;
 
+            // Incrementation du stock
             echantillon.Stock += quantite;
             await UpdateEchantillonAsync(echantillon);
 
+            // Enregistrement du mouvement dans l'historique
             var majStock = new MajStock
             {
                 CodeProduit = code,
@@ -166,6 +193,11 @@ public class DatabaseService
         }
     }
 
+    /// <summary>
+    /// Retire une quantite du stock d'un echantillon.
+    /// Le stock ne peut pas descendre en dessous de zero (plancher a 0 avec Math.Max).
+    /// Insere egalement une ligne de tracabilite dans MajStock.
+    /// </summary>
     public async Task<bool> SupprimerStockAsync(string code, float quantite)
     {
         try
@@ -178,9 +210,11 @@ public class DatabaseService
             if (echantillon == null)
                 return false;
 
+            // Decrementation du stock avec un plancher a 0
             echantillon.Stock = Math.Max(0, echantillon.Stock - quantite);
             await UpdateEchantillonAsync(echantillon);
 
+            // Enregistrement du mouvement dans l'historique
             var majStock = new MajStock
             {
                 CodeProduit = code,
@@ -199,7 +233,9 @@ public class DatabaseService
         }
     }
 
-    // Mouvements
+    // --- Consultation des mouvements ---
+
+    // Recupere tous les mouvements, tries du plus recent au plus ancien
     public async Task<List<MajStock>> GetMouvementsAsync()
     {
         try
@@ -214,11 +250,12 @@ public class DatabaseService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de la récupération des mouvements: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de la recuperation des mouvements: {ex.Message}");
             return [];
         }
     }
 
+    // Recupere uniquement les mouvements de type "ajout"
     public async Task<List<MajStock>> GetAjoutsAsync()
     {
         try
@@ -234,11 +271,12 @@ public class DatabaseService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de la récupération des ajouts: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de la recuperation des ajouts: {ex.Message}");
             return [];
         }
     }
 
+    // Recupere uniquement les mouvements de type "suppression"
     public async Task<List<MajStock>> GetSuppressionsAsync()
     {
         try
@@ -254,12 +292,17 @@ public class DatabaseService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de la récupération des suppressions: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de la recuperation des suppressions: {ex.Message}");
             return [];
         }
     }
 
-    // Données de test
+    // --- Jeu d'essai ---
+
+    /// <summary>
+    /// Insere des donnees de test au premier lancement de l'application.
+    /// Ne s'execute que si la table Echantillons est vide.
+    /// </summary>
     private async Task InsererDonneesTestAsync()
     {
         try
@@ -269,7 +312,7 @@ public class DatabaseService
 
             var count = await _database.Table<Echantillon>().CountAsync();
             if (count > 0)
-                return; // Les données existent déjà
+                return; // Des donnees existent deja, on ne reinitialise pas
 
             var echantillons = new List<Echantillon>
             {
@@ -322,7 +365,7 @@ public class DatabaseService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Erreur lors de l'insertion des données de test: {ex.Message}");
+            Debug.WriteLine($"Erreur lors de l'insertion des donnees de test: {ex.Message}");
         }
     }
 }

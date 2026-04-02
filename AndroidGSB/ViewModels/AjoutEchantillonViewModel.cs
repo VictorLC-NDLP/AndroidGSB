@@ -6,10 +6,15 @@ using System.Diagnostics;
 
 namespace AndroidGSB.ViewModels;
 
+/// <summary>
+/// ViewModel du formulaire d'ajout d'un echantillon.
+/// Gere la saisie, la validation et l'insertion en base d'un nouvel echantillon.
+/// </summary>
 public partial class AjoutEchantillonViewModel : BaseViewModel
 {
     private readonly DatabaseService _databaseService;
 
+    // Champs de saisie lies aux Entry de la vue via data binding
     [ObservableProperty]
     private string codeProduit = string.Empty;
 
@@ -19,6 +24,7 @@ public partial class AjoutEchantillonViewModel : BaseViewModel
     [ObservableProperty]
     private string stockSaisi = string.Empty;
 
+    // Message affiche a l'utilisateur apres une tentative d'ajout (succes ou erreur)
     [ObservableProperty]
     private string messageResultat = string.Empty;
 
@@ -28,6 +34,10 @@ public partial class AjoutEchantillonViewModel : BaseViewModel
         Title = "Saisie d'un échantillon";
     }
 
+    /// <summary>
+    /// Valide les champs saisis puis insere l'echantillon en base.
+    /// Controles effectues : champs non vides, stock numerique positif, code unique.
+    /// </summary>
     [RelayCommand]
     public async Task AjouterEchantillon()
     {
@@ -35,26 +45,28 @@ public partial class AjoutEchantillonViewModel : BaseViewModel
         {
             IsBusy = true;
 
-            // Validation
+            // Controle champ code produit
             if (string.IsNullOrWhiteSpace(CodeProduit))
             {
                 MessageResultat = "Erreur : Le code produit ne peut pas être vide";
                 return;
             }
 
+            // Controle champ libelle
             if (string.IsNullOrWhiteSpace(LibelleProduit))
             {
                 MessageResultat = "Erreur : Le libellé produit ne peut pas être vide";
                 return;
             }
 
+            // Controle format et valeur du stock
             if (!float.TryParse(StockSaisi, out var stock) || stock < 0)
             {
                 MessageResultat = "Erreur : Le stock doit être un nombre positif";
                 return;
             }
 
-            // Vérifier si le code existe déjà
+            // Verification d'unicite du code produit en base
             var existing = await _databaseService.GetEchantillonByCodeAsync(CodeProduit);
             if (existing != null)
             {
@@ -62,7 +74,7 @@ public partial class AjoutEchantillonViewModel : BaseViewModel
                 return;
             }
 
-            // Créer et insérer l'échantillon
+            // Creation de l'objet et insertion en base
             var echantillon = new Echantillon
             {
                 CodeProduit = CodeProduit,
@@ -74,8 +86,9 @@ public partial class AjoutEchantillonViewModel : BaseViewModel
             var result = await _databaseService.InsererEchantillonAsync(echantillon);
             if (result > 0)
             {
-                MessageResultat = $"✓ Échantillon ajouté : {CodeProduit}, {LibelleProduit}, {StockSaisi}";
-                // Réinitialiser les champs
+                MessageResultat = $"Echantillon ajoute : {CodeProduit}, {LibelleProduit}, {StockSaisi}";
+
+                // Reinitialisation des champs apres un ajout reussi
                 CodeProduit = string.Empty;
                 LibelleProduit = string.Empty;
                 StockSaisi = string.Empty;
@@ -96,11 +109,10 @@ public partial class AjoutEchantillonViewModel : BaseViewModel
         }
     }
 
+    // Retour a la page precedente
     [RelayCommand]
     public async Task Quitter()
     {
         await Shell.Current.GoToAsync("..");
     }
 }
-
-
