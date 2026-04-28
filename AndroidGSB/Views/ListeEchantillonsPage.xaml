@@ -33,14 +33,14 @@
                         BorderColor="#40916c"
                         HasShadow="True">
                         <Grid
-                            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
                             ColumnDefinitions="100,*,Auto">
 
                             <!-- Image du produit -->
                             <Image
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                Grid.RowSpan="8"
+                                Grid.RowSpan="7"
                                 Source="{Binding CodeProduit, Converter={StaticResource CodeToImageConverter}}"
                                 Aspect="AspectFill"
                                 WidthRequest="100"
@@ -103,21 +103,9 @@
                                 IsVisible="{Binding Dosage, Converter={StaticResource StringNotEmptyConverter}}"
                                 FontFamily="OpenSansRegular"/>
 
-                            <!-- Composition -->
-                            <Label
-                                Grid.Row="4"
-                                Grid.Column="1"
-                                Grid.ColumnSpan="2"
-                                Text="{Binding Composition, StringFormat='Composition : {0}'}"
-                                TextColor="#b7e4c7"
-                                FontSize="11"
-                                Margin="0,2,0,0"
-                                IsVisible="{Binding Composition, Converter={StaticResource StringNotEmptyConverter}}"
-                                FontFamily="OpenSansRegular"/>
-
                             <!-- Conseils -->
                             <Label
-                                Grid.Row="5"
+                                Grid.Row="4"
                                 Grid.Column="1"
                                 Grid.ColumnSpan="2"
                                 Text="{Binding Conseils, StringFormat='Conseils : {0}'}"
@@ -129,7 +117,7 @@
 
                             <!-- Complément -->
                             <Label
-                                Grid.Row="6"
+                                Grid.Row="5"
                                 Grid.Column="1"
                                 Grid.ColumnSpan="2"
                                 Text="{Binding Complement, StringFormat='Complément : {0}'}"
@@ -141,7 +129,7 @@
 
                             <!-- Stock actuel -->
                             <Label
-                                Grid.Row="7"
+                                Grid.Row="6"
                                 Grid.Column="1"
                                 Grid.ColumnSpan="2"
                                 Text="{Binding Stock, StringFormat='Stock : {0}'}"

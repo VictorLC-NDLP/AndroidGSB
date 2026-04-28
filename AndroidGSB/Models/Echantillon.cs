@@ -48,13 +48,6 @@ public class Echantillon : ObservableObject
         set => SetProperty(ref _dosage, value);
     }
 
-    private string _composition = string.Empty;
-    public string Composition
-    {
-        get => _composition;
-        set => SetProperty(ref _composition, value);
-    }
-
     private string _complement = string.Empty;
     public string Complement
     {
