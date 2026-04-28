@@ -320,7 +320,11 @@ public class DatabaseService
                 {
                     CodeProduit = "A0001",
                     LibelleProduit = "Acai Bio",
-                    Description = "Riche en antioxydants",
+                    Description = "Riche en antioxydants naturels",
+                    Dosage = "1 gélule par jour",
+                    Composition = "Extrait d'açaí 500 mg, maltodextrine",
+                    Conseils = "Prendre de préférence avec un repas",
+                    Complement = "Riche en anthocyanes et oméga-9",
                     Stock = 10f,
                     StockMini = 3f
                 },
@@ -329,6 +333,10 @@ public class DatabaseService
                     CodeProduit = "A0002",
                     LibelleProduit = "Aloe Vera",
                     Description = "Apaisant et hydratant",
+                    Dosage = "2 gélules matin et soir",
+                    Composition = "Gel d'aloe vera 300 mg, amidon de maïs",
+                    Conseils = "À conserver au frais après ouverture",
+                    Complement = "Sans conservateurs ni colorants artificiels",
                     Stock = 5f,
                     StockMini = 2f
                 },
@@ -336,7 +344,11 @@ public class DatabaseService
                 {
                     CodeProduit = "B0001",
                     LibelleProduit = "Baobab Poudre",
-                    Description = "Source de vitamine C",
+                    Description = "Source naturelle de vitamine C",
+                    Dosage = "1 cuillère à café par jour (5 g)",
+                    Composition = "Poudre de fruit de baobab 100 %",
+                    Conseils = "Mélanger dans un yaourt ou un smoothie",
+                    Complement = "Source naturelle de calcium et de fibres",
                     Stock = 7f,
                     StockMini = 2f
                 },
@@ -344,7 +356,11 @@ public class DatabaseService
                 {
                     CodeProduit = "B0002",
                     LibelleProduit = "Bacopa Monnieri",
-                    Description = "Améliore la mémoire",
+                    Description = "Améliore la mémoire et la concentration",
+                    Dosage = "2 gélules par jour",
+                    Composition = "Extrait de Bacopa 300 mg, 50 % bacosides",
+                    Conseils = "Prendre de préférence le soir au dîner",
+                    Complement = "Cure de 3 mois recommandée",
                     Stock = 6f,
                     StockMini = 2f
                 },
@@ -352,7 +368,11 @@ public class DatabaseService
                 {
                     CodeProduit = "M0001",
                     LibelleProduit = "Moringa Bio",
-                    Description = "Multivitaminé naturel",
+                    Description = "Multivitaminé naturel complet",
+                    Dosage = "3 gélules par jour en une prise",
+                    Composition = "Feuilles de moringa bio 400 mg",
+                    Conseils = "Ne pas dépasser la dose journalière conseillée",
+                    Complement = "Certifié Agriculture Biologique AB",
                     Stock = 12f,
                     StockMini = 4f
                 }

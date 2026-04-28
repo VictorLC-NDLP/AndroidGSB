@@ -33,20 +33,22 @@
                         BorderColor="#40916c"
                         HasShadow="True">
                         <Grid
-                            RowDefinitions="Auto,Auto,Auto,Auto"
+                            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
                             ColumnDefinitions="100,*,Auto">
 
                             <!-- Image du produit -->
                             <Image
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                Grid.RowSpan="4"
+                                Grid.RowSpan="8"
                                 Source="{Binding CodeProduit, Converter={StaticResource CodeToImageConverter}}"
                                 Aspect="AspectFill"
                                 WidthRequest="100"
                                 HeightRequest="100"
+                                VerticalOptions="Start"
                                 Margin="0,0,10,0"/>
 
+                            <!-- Code produit + stock mini -->
                             <Label
                                 Grid.Row="0"
                                 Grid.Column="1"
@@ -64,6 +66,7 @@
                                 FontSize="12"
                                 FontFamily="OpenSansRegular"/>
 
+                            <!-- Libellé -->
                             <Label
                                 Grid.Row="1"
                                 Grid.Column="1"
@@ -71,9 +74,11 @@
                                 Text="{Binding LibelleProduit}"
                                 TextColor="#f1f3f1"
                                 FontSize="14"
-                                Margin="0,5,0,0"
+                                FontAttributes="Bold"
+                                Margin="0,4,0,0"
                                 FontFamily="OpenSansRegular"/>
 
+                            <!-- Description -->
                             <Label
                                 Grid.Row="2"
                                 Grid.Column="1"
@@ -81,18 +86,69 @@
                                 Text="{Binding Description}"
                                 TextColor="#d4d8d4"
                                 FontSize="11"
-                                Margin="0,3,0,0"
+                                FontAttributes="Italic"
+                                Margin="0,2,0,0"
+                                IsVisible="{Binding Description, Converter={StaticResource StringNotEmptyConverter}}"
                                 FontFamily="OpenSansRegular"/>
 
+                            <!-- Dosage -->
                             <Label
                                 Grid.Row="3"
                                 Grid.Column="1"
                                 Grid.ColumnSpan="2"
-                                Text="{Binding Stock, StringFormat='Stock: {0}'}"
+                                Text="{Binding Dosage, StringFormat='Dosage : {0}'}"
+                                TextColor="#b7e4c7"
+                                FontSize="11"
+                                Margin="0,4,0,0"
+                                IsVisible="{Binding Dosage, Converter={StaticResource StringNotEmptyConverter}}"
+                                FontFamily="OpenSansRegular"/>
+
+                            <!-- Composition -->
+                            <Label
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Composition, StringFormat='Composition : {0}'}"
+                                TextColor="#b7e4c7"
+                                FontSize="11"
+                                Margin="0,2,0,0"
+                                IsVisible="{Binding Composition, Converter={StaticResource StringNotEmptyConverter}}"
+                                FontFamily="OpenSansRegular"/>
+
+                            <!-- Conseils -->
+                            <Label
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Conseils, StringFormat='Conseils : {0}'}"
+                                TextColor="#95d5b2"
+                                FontSize="11"
+                                Margin="0,2,0,0"
+                                IsVisible="{Binding Conseils, Converter={StaticResource StringNotEmptyConverter}}"
+                                FontFamily="OpenSansRegular"/>
+
+                            <!-- Complément -->
+                            <Label
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Complement, StringFormat='Complément : {0}'}"
+                                TextColor="#95d5b2"
+                                FontSize="11"
+                                Margin="0,2,0,0"
+                                IsVisible="{Binding Complement, Converter={StaticResource StringNotEmptyConverter}}"
+                                FontFamily="OpenSansRegular"/>
+
+                            <!-- Stock actuel -->
+                            <Label
+                                Grid.Row="7"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Stock, StringFormat='Stock : {0}'}"
                                 TextColor="#40916c"
                                 FontSize="12"
                                 FontAttributes="Bold"
-                                Margin="0,5,0,0"
+                                Margin="0,6,0,0"
                                 FontFamily="OpenSansRegular"/>
 
                         </Grid>
