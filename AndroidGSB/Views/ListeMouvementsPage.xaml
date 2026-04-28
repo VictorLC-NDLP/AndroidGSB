@@ -8,12 +8,14 @@
              Title="Mouvements de stock"
              BackgroundColor="#1a472a">
 
-    <VerticalStackLayout
+    <Grid
+        RowDefinitions="Auto,Auto,Auto,*,Auto"
         Padding="10"
-        Spacing="10">
+        RowSpacing="10">
 
         <!-- Barre de filtres : Tous, Ajouts, Suppressions -->
         <Grid
+            Grid.Row="0"
             ColumnDefinitions="*,*,*"
             ColumnSpacing="5"
             Padding="5">
@@ -54,6 +56,7 @@
         </Grid>
 
         <Label
+            Grid.Row="1"
             Text="{Binding FiltreActif, StringFormat='Filtre actif: {0}'}"
             TextColor="#d4d8d4"
             FontSize="12"
@@ -61,11 +64,13 @@
             FontFamily="OpenSansRegular"/>
 
         <ActivityIndicator
+            Grid.Row="2"
             IsRunning="{Binding IsBusy}"
             IsVisible="{Binding IsBusy}"
             Color="#52b788"/>
 
         <CollectionView
+            Grid.Row="3"
             ItemsSource="{Binding Mouvements}"
             SelectionMode="Single">
             <CollectionView.ItemTemplate>
@@ -125,6 +130,7 @@
         </CollectionView>
 
         <Button
+            Grid.Row="4"
             Text="🚪 Quitter"
             Command="{Binding QuitterCommand}"
             BackgroundColor="#d62828"
@@ -135,7 +141,7 @@
             HorizontalOptions="Fill"
             FontFamily="OpenSansRegular"/>
 
-    </VerticalStackLayout>
+    </Grid>
 
 </ContentPage>
 
