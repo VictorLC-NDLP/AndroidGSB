@@ -70,4 +70,9 @@ public class Echantillon : ObservableObject
         get => _stockMini;
         set => SetProperty(ref _stockMini, value);
     }
+
+    // Propriete calculee, non persistee en base (SQLite l'ignore)
+    // Remplie par le ViewModel apres chargement via GetComposantsByEchantillonIdAsync
+    [Ignore]
+    public List<string> ListeComposants { get; set; } = [];
 }

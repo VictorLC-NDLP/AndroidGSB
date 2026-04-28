@@ -25,7 +25,7 @@ public partial class ListeEchantillonsViewModel : BaseViewModel
         Title = "Liste des échantillons";
     }
 
-    // Charge tous les echantillons depuis la base SQLite
+    // Charge tous les echantillons depuis la base SQLite et leurs composants associes
     // Appelee dans OnAppearing de la page pour rafraichir les donnees a chaque affichage
     [RelayCommand]
     public async Task ChargerEchantillons()
@@ -34,6 +34,15 @@ public partial class ListeEchantillonsViewModel : BaseViewModel
         {
             IsBusy = true;
             var echantillons = await _databaseService.GetEchantillonsAsync();
+
+            foreach (var e in echantillons)
+            {
+                var composants = await _databaseService.GetComposantsByEchantillonIdAsync(e.Id);
+                e.ListeComposants = composants
+                    .Select(c => $"- {c.Composant.Nom} ({c.Quantite})")
+                    .ToList();
+            }
+
             Echantillons = new ObservableCollection<Echantillon>(echantillons);
         }
         catch (Exception ex)
