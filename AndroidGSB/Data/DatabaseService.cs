@@ -395,88 +395,89 @@ public class DatabaseService
             if (_database == null)
                 return;
 
-            var count = await _database.Table<Echantillon>().CountAsync();
-            if (count > 0)
-                return; // Des donnees existent deja, on ne reinitialise pas
-
-            // --- Composants ---
-            var cAcai        = new Composant { Nom = "Extrait d'açaí",          Description = "Baie amazonienne riche en anthocyanes" };
-            var cMalto       = new Composant { Nom = "Maltodextrine",            Description = "Excipient issu de l'amidon de maïs" };
-            var cAloe        = new Composant { Nom = "Gel d'aloe vera",          Description = "Extrait apaisant de la feuille d'aloe" };
-            var cAmidon      = new Composant { Nom = "Amidon de maïs",           Description = "Excipient naturel" };
-            var cBaobab      = new Composant { Nom = "Poudre de fruit de baobab", Description = "Fruit séché 100 % naturel" };
-            var cBacopa      = new Composant { Nom = "Extrait de Bacopa",        Description = "Plante ayurvédique adaptogène" };
-            var cBacosides   = new Composant { Nom = "Bacosides",               Description = "Principes actifs du Bacopa Monnieri" };
-            var cMoringa     = new Composant { Nom = "Feuilles de moringa bio",  Description = "Feuilles séchées issues de l'agriculture biologique" };
-
-            foreach (var c in new[] { cAcai, cMalto, cAloe, cAmidon, cBaobab, cBacopa, cBacosides, cMoringa })
-                await _database.InsertAsync(c); // SQLite-net renseigne c.Id apres l'insertion
-
-            // --- Echantillons ---
-            var eAcai = new Echantillon
+            // --- Echantillons (guard independant) ---
+            var countEch = await _database.Table<Echantillon>().CountAsync();
+            if (countEch == 0)
             {
-                CodeProduit = "A0001", LibelleProduit = "Acai Bio",
-                Description = "Riche en antioxydants naturels",
-                Dosage = "1 gélule par jour",
-                Conseils = "Prendre de préférence avec un repas",
-                Complement = "Riche en anthocyanes et oméga-9",
-                Stock = 10f, StockMini = 3f
-            };
-            var eAloe = new Echantillon
-            {
-                CodeProduit = "A0002", LibelleProduit = "Aloe Vera",
-                Description = "Apaisant et hydratant",
-                Dosage = "2 gélules matin et soir",
-                Conseils = "À conserver au frais après ouverture",
-                Complement = "Sans conservateurs ni colorants artificiels",
-                Stock = 5f, StockMini = 2f
-            };
-            var eBaobab = new Echantillon
-            {
-                CodeProduit = "B0001", LibelleProduit = "Baobab Poudre",
-                Description = "Source naturelle de vitamine C",
-                Dosage = "1 cuillère à café par jour (5 g)",
-                Conseils = "Mélanger dans un yaourt ou un smoothie",
-                Complement = "Source naturelle de calcium et de fibres",
-                Stock = 7f, StockMini = 2f
-            };
-            var eBacopa = new Echantillon
-            {
-                CodeProduit = "B0002", LibelleProduit = "Bacopa Monnieri",
-                Description = "Améliore la mémoire et la concentration",
-                Dosage = "2 gélules par jour",
-                Conseils = "Prendre de préférence le soir au dîner",
-                Complement = "Cure de 3 mois recommandée",
-                Stock = 6f, StockMini = 2f
-            };
-            var eMoringa = new Echantillon
-            {
-                CodeProduit = "M0001", LibelleProduit = "Moringa Bio",
-                Description = "Multivitaminé naturel complet",
-                Dosage = "3 gélules par jour en une prise",
-                Conseils = "Ne pas dépasser la dose journalière conseillée",
-                Complement = "Certifié Agriculture Biologique AB",
-                Stock = 12f, StockMini = 4f
-            };
+                var echantillons = new List<Echantillon>
+                {
+                    new() { CodeProduit = "A0001", LibelleProduit = "Acai Bio",
+                            Description = "Riche en antioxydants naturels",
+                            Dosage = "1 gélule par jour",
+                            Conseils = "Prendre de préférence avec un repas",
+                            Complement = "Riche en anthocyanes et oméga-9",
+                            Stock = 10f, StockMini = 3f },
+                    new() { CodeProduit = "A0002", LibelleProduit = "Aloe Vera",
+                            Description = "Apaisant et hydratant",
+                            Dosage = "2 gélules matin et soir",
+                            Conseils = "À conserver au frais après ouverture",
+                            Complement = "Sans conservateurs ni colorants artificiels",
+                            Stock = 5f, StockMini = 2f },
+                    new() { CodeProduit = "B0001", LibelleProduit = "Baobab Poudre",
+                            Description = "Source naturelle de vitamine C",
+                            Dosage = "1 cuillère à café par jour (5 g)",
+                            Conseils = "Mélanger dans un yaourt ou un smoothie",
+                            Complement = "Source naturelle de calcium et de fibres",
+                            Stock = 7f, StockMini = 2f },
+                    new() { CodeProduit = "B0002", LibelleProduit = "Bacopa Monnieri",
+                            Description = "Améliore la mémoire et la concentration",
+                            Dosage = "2 gélules par jour",
+                            Conseils = "Prendre de préférence le soir au dîner",
+                            Complement = "Cure de 3 mois recommandée",
+                            Stock = 6f, StockMini = 2f },
+                    new() { CodeProduit = "M0001", LibelleProduit = "Moringa Bio",
+                            Description = "Multivitaminé naturel complet",
+                            Dosage = "3 gélules par jour en une prise",
+                            Conseils = "Ne pas dépasser la dose journalière conseillée",
+                            Complement = "Certifié Agriculture Biologique AB",
+                            Stock = 12f, StockMini = 4f },
+                };
+                foreach (var e in echantillons)
+                    await _database.InsertAsync(e);
+            }
 
-            foreach (var e in new[] { eAcai, eAloe, eBaobab, eBacopa, eMoringa })
-                await _database.InsertAsync(e); // SQLite-net renseigne e.Id apres l'insertion
-
-            // --- Liaisons Contient (N:N) ---
-            var liens = new List<Contient>
+            // --- Composants & Contient (guard independant) ---
+            // Ce bloc s'execute meme si les echantillons existaient deja avant l'ajout des tables
+            var countComp = await _database.Table<Composant>().CountAsync();
+            if (countComp == 0)
             {
-                new() { EchantillonId = eAcai.Id,   ComposantId = cAcai.Id,      Quantite = "500 mg" },
-                new() { EchantillonId = eAcai.Id,   ComposantId = cMalto.Id,     Quantite = "q.s.p." },
-                new() { EchantillonId = eAloe.Id,   ComposantId = cAloe.Id,      Quantite = "300 mg" },
-                new() { EchantillonId = eAloe.Id,   ComposantId = cAmidon.Id,    Quantite = "q.s.p." },
-                new() { EchantillonId = eBaobab.Id, ComposantId = cBaobab.Id,    Quantite = "100 %" },
-                new() { EchantillonId = eBacopa.Id, ComposantId = cBacopa.Id,    Quantite = "300 mg" },
-                new() { EchantillonId = eBacopa.Id, ComposantId = cBacosides.Id, Quantite = "50 %" },
-                new() { EchantillonId = eMoringa.Id, ComposantId = cMoringa.Id,  Quantite = "400 mg" },
-            };
+                var cAcai      = new Composant { Nom = "Extrait d'açaí",           Description = "Baie amazonienne riche en anthocyanes" };
+                var cMalto     = new Composant { Nom = "Maltodextrine",             Description = "Excipient issu de l'amidon de maïs" };
+                var cAloe      = new Composant { Nom = "Gel d'aloe vera",           Description = "Extrait apaisant de la feuille d'aloe" };
+                var cAmidon    = new Composant { Nom = "Amidon de maïs",            Description = "Excipient naturel" };
+                var cBaobab    = new Composant { Nom = "Poudre de fruit de baobab", Description = "Fruit séché 100 % naturel" };
+                var cBacopa    = new Composant { Nom = "Extrait de Bacopa",         Description = "Plante ayurvédique adaptogène" };
+                var cBacosides = new Composant { Nom = "Bacosides",                Description = "Principes actifs du Bacopa Monnieri" };
+                var cMoringa   = new Composant { Nom = "Feuilles de moringa bio",   Description = "Feuilles séchées issues de l'agriculture biologique" };
 
-            foreach (var lien in liens)
-                await _database.InsertAsync(lien);
+                foreach (var c in new[] { cAcai, cMalto, cAloe, cAmidon, cBaobab, cBacopa, cBacosides, cMoringa })
+                    await _database.InsertAsync(c);
+
+                // Lookup des echantillons par code pour obtenir leurs Id reels
+                var eAcai    = await _database.Table<Echantillon>().FirstOrDefaultAsync(e => e.CodeProduit == "A0001");
+                var eAloe    = await _database.Table<Echantillon>().FirstOrDefaultAsync(e => e.CodeProduit == "A0002");
+                var eBaobab  = await _database.Table<Echantillon>().FirstOrDefaultAsync(e => e.CodeProduit == "B0001");
+                var eBacopa  = await _database.Table<Echantillon>().FirstOrDefaultAsync(e => e.CodeProduit == "B0002");
+                var eMoringa = await _database.Table<Echantillon>().FirstOrDefaultAsync(e => e.CodeProduit == "M0001");
+
+                if (eAcai == null || eAloe == null || eBaobab == null || eBacopa == null || eMoringa == null)
+                    return;
+
+                var liens = new List<Contient>
+                {
+                    new() { EchantillonId = eAcai.Id,    ComposantId = cAcai.Id,      Quantite = "80 %" },
+                    new() { EchantillonId = eAcai.Id,    ComposantId = cMalto.Id,     Quantite = "20 %" },
+                    new() { EchantillonId = eAloe.Id,    ComposantId = cAloe.Id,      Quantite = "75 %" },
+                    new() { EchantillonId = eAloe.Id,    ComposantId = cAmidon.Id,    Quantite = "25 %" },
+                    new() { EchantillonId = eBaobab.Id,  ComposantId = cBaobab.Id,    Quantite = "100 %" },
+                    new() { EchantillonId = eBacopa.Id,  ComposantId = cBacopa.Id,    Quantite = "60 %" },
+                    new() { EchantillonId = eBacopa.Id,  ComposantId = cBacosides.Id, Quantite = "40 %" },
+                    new() { EchantillonId = eMoringa.Id, ComposantId = cMoringa.Id,   Quantite = "100 %" },
+                };
+
+                foreach (var lien in liens)
+                    await _database.InsertAsync(lien);
+            }
         }
         catch (Exception ex)
         {
