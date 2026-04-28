@@ -441,16 +441,12 @@ public class DatabaseService
             var countComp = await _database.Table<Composant>().CountAsync();
             if (countComp == 0)
             {
-                var cAcai      = new Composant { Nom = "Extrait d'açaí",           Description = "Baie amazonienne riche en anthocyanes" };
-                var cMalto     = new Composant { Nom = "Maltodextrine",             Description = "Excipient issu de l'amidon de maïs" };
-                var cAloe      = new Composant { Nom = "Gel d'aloe vera",           Description = "Extrait apaisant de la feuille d'aloe" };
-                var cAmidon    = new Composant { Nom = "Amidon de maïs",            Description = "Excipient naturel" };
-                var cBaobab    = new Composant { Nom = "Poudre de fruit de baobab", Description = "Fruit séché 100 % naturel" };
-                var cBacopa    = new Composant { Nom = "Extrait de Bacopa",         Description = "Plante ayurvédique adaptogène" };
-                var cBacosides = new Composant { Nom = "Bacosides",                Description = "Principes actifs du Bacopa Monnieri" };
-                var cMoringa   = new Composant { Nom = "Feuilles de moringa bio",   Description = "Feuilles séchées issues de l'agriculture biologique" };
+                var cParacetamol = new Composant { Nom = "Paracétamol",    Description = "Principe actif analgésique et antipyrétique" };
+                var cAmidon      = new Composant { Nom = "Amidon de maïs", Description = "Excipient naturel" };
+                var cProvidone   = new Composant { Nom = "Providone",       Description = "Liant pharmaceutique" };
+                var cSorbitol    = new Composant { Nom = "Sorbitol",        Description = "Édulcorant et agent de charge" };
 
-                foreach (var c in new[] { cAcai, cMalto, cAloe, cAmidon, cBaobab, cBacopa, cBacosides, cMoringa })
+                foreach (var c in new[] { cParacetamol, cAmidon, cProvidone, cSorbitol })
                     await _database.InsertAsync(c);
 
                 // Lookup des echantillons par code pour obtenir leurs Id reels
@@ -465,14 +461,31 @@ public class DatabaseService
 
                 var liens = new List<Contient>
                 {
-                    new() { EchantillonId = eAcai.Id,    ComposantId = cAcai.Id,      Quantite = "80 %" },
-                    new() { EchantillonId = eAcai.Id,    ComposantId = cMalto.Id,     Quantite = "20 %" },
-                    new() { EchantillonId = eAloe.Id,    ComposantId = cAloe.Id,      Quantite = "75 %" },
-                    new() { EchantillonId = eAloe.Id,    ComposantId = cAmidon.Id,    Quantite = "25 %" },
-                    new() { EchantillonId = eBaobab.Id,  ComposantId = cBaobab.Id,    Quantite = "100 %" },
-                    new() { EchantillonId = eBacopa.Id,  ComposantId = cBacopa.Id,    Quantite = "60 %" },
-                    new() { EchantillonId = eBacopa.Id,  ComposantId = cBacosides.Id, Quantite = "40 %" },
-                    new() { EchantillonId = eMoringa.Id, ComposantId = cMoringa.Id,   Quantite = "100 %" },
+                    // Acai Bio
+                    new() { EchantillonId = eAcai.Id,    ComposantId = cParacetamol.Id, Quantite = "87 %" },
+                    new() { EchantillonId = eAcai.Id,    ComposantId = cAmidon.Id,      Quantite = "7 %" },
+                    new() { EchantillonId = eAcai.Id,    ComposantId = cProvidone.Id,   Quantite = "2 %" },
+                    new() { EchantillonId = eAcai.Id,    ComposantId = cSorbitol.Id,    Quantite = "1 %" },
+                    // Aloe Vera
+                    new() { EchantillonId = eAloe.Id,    ComposantId = cParacetamol.Id, Quantite = "80 %" },
+                    new() { EchantillonId = eAloe.Id,    ComposantId = cAmidon.Id,      Quantite = "12 %" },
+                    new() { EchantillonId = eAloe.Id,    ComposantId = cProvidone.Id,   Quantite = "5 %" },
+                    new() { EchantillonId = eAloe.Id,    ComposantId = cSorbitol.Id,    Quantite = "3 %" },
+                    // Baobab Poudre
+                    new() { EchantillonId = eBaobab.Id,  ComposantId = cParacetamol.Id, Quantite = "75 %" },
+                    new() { EchantillonId = eBaobab.Id,  ComposantId = cAmidon.Id,      Quantite = "15 %" },
+                    new() { EchantillonId = eBaobab.Id,  ComposantId = cProvidone.Id,   Quantite = "6 %" },
+                    new() { EchantillonId = eBaobab.Id,  ComposantId = cSorbitol.Id,    Quantite = "4 %" },
+                    // Bacopa Monnieri
+                    new() { EchantillonId = eBacopa.Id,  ComposantId = cParacetamol.Id, Quantite = "83 %" },
+                    new() { EchantillonId = eBacopa.Id,  ComposantId = cAmidon.Id,      Quantite = "9 %" },
+                    new() { EchantillonId = eBacopa.Id,  ComposantId = cProvidone.Id,   Quantite = "5 %" },
+                    new() { EchantillonId = eBacopa.Id,  ComposantId = cSorbitol.Id,    Quantite = "3 %" },
+                    // Moringa Bio
+                    new() { EchantillonId = eMoringa.Id, ComposantId = cParacetamol.Id, Quantite = "90 %" },
+                    new() { EchantillonId = eMoringa.Id, ComposantId = cAmidon.Id,      Quantite = "5 %" },
+                    new() { EchantillonId = eMoringa.Id, ComposantId = cProvidone.Id,   Quantite = "3 %" },
+                    new() { EchantillonId = eMoringa.Id, ComposantId = cSorbitol.Id,    Quantite = "2 %" },
                 };
 
                 foreach (var lien in liens)
